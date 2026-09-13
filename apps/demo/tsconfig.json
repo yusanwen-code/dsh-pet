@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": true,
+    "types": ["vite/client"]
+  },
+  "references": [
+    { "path": "../../packages/protocol" },
+    { "path": "../../packages/web" }
+  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+}

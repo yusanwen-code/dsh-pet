@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title">
+  <title id="title">追逐思绪的连接鲸</title>
+  <defs><linearGradient id="ocean" x1="38" y1="55" x2="193" y2="193" gradientUnits="userSpaceOnUse"><stop stop-color="#7890FF"/><stop offset="1" stop-color="#334ED4"/></linearGradient></defs>
+  <circle cx="168" cy="49" r="9" fill="#62E6FF"/><circle cx="194" cy="69" r="5" fill="#A9F3FF"/><circle cx="148" cy="29" r="4" fill="#4D6BFE"/>
+  <path d="M47 170c-17-17-20-43-7-65 16-27 50-39 83-29 18-23 42-28 63-15-14 9-20 21-17 35 22 10 33 29 28 51-7 31-39 51-79 51-29 0-54-10-71-28Z" fill="url(#ocean)"/>
+  <path d="M170 98c18-8 34-4 44 11-14 1-23 7-29 18 15 5 24 14 27 27-18 0-34-8-45-23" fill="#62E6FF" stroke="#111A38" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M57 148c24 22 67 26 104 8-12 25-40 38-72 31-20-4-35-15-43-29Z" fill="#D8F8FF"/>
+  <circle cx="91" cy="116" r="7" fill="#111A38"/><circle cx="94" cy="113" r="2" fill="white"/>
+  <path d="M108 139c8-4 16-4 24 0" fill="none" stroke="#111A38" stroke-width="5" stroke-linecap="round"/>
+  <path d="M72 79c-3-13 4-24 20-28 0 12 6 19 18 23" fill="#62E6FF" stroke="#111A38" stroke-width="5" stroke-linecap="round"/>
+  <rect x="21" y="132" width="29" height="20" rx="8" fill="#111A38"/><rect x="14" y="137" width="10" height="10" rx="3" fill="#62E6FF"/>
+</svg>

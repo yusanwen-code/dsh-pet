@@ -51,6 +51,31 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@24.13.4)(jsdom@27.4.0(supports-color@7.1.0))(supports-color@7.1.0)
 
+  apps/demo:
+    dependencies:
+      '@dsh-pet/deepseek-pet':
+        specifier: workspace:*
+        version: link:../../pets/deepseek
+      '@dsh-pet/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
+      '@dsh-pet/web':
+        specifier: workspace:*
+        version: link:../../packages/web
+      react:
+        specifier: ^19.1.1
+        version: 19.3.0
+      react-dom:
+        specifier: ^19.1.1
+        version: 19.3.0(react@19.3.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^5.0.3
+        version: 5.2.0(supports-color@7.1.0)(vite@7.3.6(@types/node@24.13.4))
+      vite:
+        specifier: ^7.1.6
+        version: 7.3.6(@types/node@24.13.4)
+
   packages/core:
     dependencies:
       '@dsh-pet/protocol':
@@ -71,6 +96,12 @@ importers:
       react:
         specifier: ^19.1.1
         version: 19.3.0
+
+  pets/deepseek:
+    dependencies:
+      '@dsh-pet/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
 
 packages:
 

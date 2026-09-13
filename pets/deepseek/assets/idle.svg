@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title">
+  <title id="title">安静待命的连接鲸</title>
+  <defs><linearGradient id="ocean" x1="35" y1="45" x2="190" y2="196" gradientUnits="userSpaceOnUse"><stop stop-color="#6F86FF"/><stop offset="1" stop-color="#334ED4"/></linearGradient></defs>
+  <path d="M50 168c-18-15-23-43-10-65 15-26 48-39 82-31 17-25 41-31 63-19-14 10-19 22-16 36 22 10 33 29 29 51-6 32-38 54-78 54-27 0-52-9-70-26Z" fill="url(#ocean)"/>
+  <path d="M170 91c18-8 34-4 44 11-14 1-23 7-29 18 15 5 24 14 27 27-18 0-34-8-45-23" fill="#62E6FF" stroke="#111A38" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M59 145c22 24 66 30 103 12-12 25-39 38-72 31-20-4-35-15-42-30Z" fill="#D8F8FF" opacity=".92"/>
+  <circle cx="91" cy="113" r="7" fill="#111A38"/><circle cx="94" cy="110" r="2" fill="white"/>
+  <path d="M103 135c11 7 24 7 35 0" fill="none" stroke="#111A38" stroke-width="5" stroke-linecap="round"/>
+  <path d="M73 75c-4-13 3-24 19-29 0 12 6 19 18 23" fill="#62E6FF" stroke="#111A38" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="24" y="128" width="28" height="20" rx="8" fill="#111A38"/><rect x="17" y="133" width="10" height="10" rx="3" fill="#62E6FF"/>
+</svg>

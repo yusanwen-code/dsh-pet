@@ -1,0 +1,17 @@
+{
+  "protocolVersion": "0.1",
+  "id": "deepsea-connector",
+  "name": "连接鲸",
+  "description": "把 DeepSeek Harness 的工作节奏变成看得见的陪伴。",
+  "author": "dsh-pet contributors",
+  "assets": {
+    "idle": { "src": "assets/idle.svg", "alt": "安静待命的连接鲸", "animation": "breathe" },
+    "thinking": { "src": "assets/thinking.svg", "alt": "追逐思绪的连接鲸", "animation": "bob" },
+    "tool": { "src": "assets/tool.svg", "alt": "连接工具的连接鲸", "animation": "pulse" },
+    "success": { "src": "assets/success.svg", "alt": "庆祝任务完成的连接鲸", "animation": "celebrate" },
+    "error": { "src": "assets/error.svg", "alt": "检查故障的连接鲸", "animation": "shake" }
+  },
+  "capabilities": [
+    { "name": "pet.wave", "description": "向用户挥鳍问候。此能力在 0.1 中只声明、不执行。", "version": "0.1" }
+  ]
+}

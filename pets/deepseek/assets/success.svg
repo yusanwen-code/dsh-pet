@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title">
+  <title id="title">庆祝任务完成的连接鲸</title>
+  <defs><linearGradient id="ocean" x1="38" y1="49" x2="193" y2="192" gradientUnits="userSpaceOnUse"><stop stop-color="#7C92FF"/><stop offset="1" stop-color="#334ED4"/></linearGradient></defs>
+  <path d="M49 169c-18-15-23-42-10-64 15-27 49-40 83-31 17-24 41-30 63-18-14 10-19 22-16 36 22 10 33 29 29 51-6 32-38 54-78 54-27 0-52-9-71-28Z" fill="url(#ocean)"/>
+  <path d="M170 94c18-8 34-4 44 11-14 1-23 7-29 18 15 5 24 14 27 27-18 0-34-8-45-23" fill="#62E6FF" stroke="#111A38" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M58 148c22 24 66 30 103 12-12 25-39 38-72 31-20-4-35-15-42-30Z" fill="#D8F8FF"/>
+  <path d="m82 112 8 7 10-11m21 3 8 7 10-11" fill="none" stroke="#111A38" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M101 139c12 10 27 10 39 0" fill="none" stroke="#111A38" stroke-width="5" stroke-linecap="round"/>
+  <path d="M73 77c-4-13 3-24 19-29 0 12 6 19 18 23" fill="#62E6FF" stroke="#111A38" stroke-width="5" stroke-linecap="round"/>
+  <path d="m36 69 4 9 10 1-8 6 2 10-8-5-9 5 2-10-7-6 10-1Zm153-35 3 7 8 1-6 5 1 8-6-4-7 4 2-8-6-5 8-1Z" fill="#FFD166"/>
+  <rect x="23" y="130" width="28" height="20" rx="8" fill="#111A38"/><rect x="16" y="135" width="10" height="10" rx="3" fill="#62E6FF"/>
+</svg>

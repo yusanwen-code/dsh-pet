@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title">
+  <title id="title">检查故障的连接鲸</title>
+  <defs><linearGradient id="ocean" x1="36" y1="51" x2="190" y2="196" gradientUnits="userSpaceOnUse"><stop stop-color="#7188F6"/><stop offset="1" stop-color="#3348B8"/></linearGradient></defs>
+  <path d="M49 169c-18-15-23-42-10-64 15-27 49-40 83-31 17-24 41-30 63-18-14 10-19 22-16 36 22 10 33 29 29 51-6 32-38 54-78 54-27 0-52-9-71-28Z" fill="url(#ocean)"/>
+  <path d="M170 94c18-8 34-4 44 11-14 1-23 7-29 18 15 5 24 14 27 27-18 0-34-8-45-23" fill="#62E6FF" stroke="#111A38" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M58 149c23 23 66 28 103 10-12 25-39 38-72 31-20-4-35-15-42-30Z" fill="#D8F8FF"/>
+  <circle cx="92" cy="115" r="7" fill="#111A38"/><circle cx="95" cy="112" r="2" fill="white"/>
+  <path d="M110 143c9-8 20-8 29 0" fill="none" stroke="#111A38" stroke-width="5" stroke-linecap="round"/>
+  <path d="M72 78c-3-13 4-24 20-28 0 12 6 19 18 23" fill="#62E6FF" stroke="#111A38" stroke-width="5" stroke-linecap="round"/>
+  <path d="M40 136H24c-9 0-16-7-16-16v-7" fill="none" stroke="#FF7D8A" stroke-width="6" stroke-linecap="round"/><path d="m13 99 18 18m0-18-18 18" stroke="#FF7D8A" stroke-width="6" stroke-linecap="round"/>
+  <path d="M174 45v19m0 10v2" stroke="#FF7D8A" stroke-width="7" stroke-linecap="round"/>
+</svg>

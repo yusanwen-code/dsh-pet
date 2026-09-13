@@ -1,0 +1,14 @@
+{
+  "protocolVersion": "0.1",
+  "id": "my-first-pet",
+  "name": "我的宠物",
+  "description": "最小可用的 dsh-pet 宠物包。",
+  "author": "Your name",
+  "assets": {
+    "idle": { "src": "assets/pet.svg", "alt": "等待中的宠物", "animation": "breathe" },
+    "thinking": { "src": "assets/pet.svg", "alt": "思考中的宠物", "animation": "bob" },
+    "tool": { "src": "assets/pet.svg", "alt": "工作中的宠物", "animation": "pulse" },
+    "success": { "src": "assets/pet.svg", "alt": "开心的宠物", "animation": "celebrate" },
+    "error": { "src": "assets/pet.svg", "alt": "困惑的宠物", "animation": "shake" }
+  }
+}

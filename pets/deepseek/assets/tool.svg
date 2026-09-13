@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title">
+  <title id="title">连接工具的连接鲸</title>
+  <defs><linearGradient id="ocean" x1="40" y1="48" x2="190" y2="194" gradientUnits="userSpaceOnUse"><stop stop-color="#6F86FF"/><stop offset="1" stop-color="#304BCF"/></linearGradient></defs>
+  <path d="M48 168c-17-16-21-43-8-65 16-27 50-39 83-29 18-23 42-28 63-15-14 9-20 21-17 35 22 10 33 29 28 51-7 31-39 52-79 52-28 0-53-10-70-29Z" fill="url(#ocean)"/>
+  <path d="M170 96c18-8 34-4 44 11-14 1-23 7-29 18 15 5 24 14 27 27-18 0-34-8-45-23" fill="#62E6FF" stroke="#111A38" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M57 147c24 23 67 27 104 9-12 25-40 38-72 31-20-4-35-15-43-29Z" fill="#D8F8FF"/>
+  <circle cx="91" cy="114" r="7" fill="#111A38"/><circle cx="94" cy="111" r="2" fill="white"/>
+  <path d="M105 137h31" stroke="#111A38" stroke-width="5" stroke-linecap="round"/>
+  <path d="M74 78c-3-13 4-24 20-28 0 12 6 19 18 23" fill="#62E6FF" stroke="#111A38" stroke-width="5" stroke-linecap="round"/>
+  <path d="M45 136H22c-8 0-14-6-14-14v-9" fill="none" stroke="#62E6FF" stroke-width="6" stroke-linecap="round"/>
+  <rect x="5" y="96" width="29" height="20" rx="7" fill="#111A38"/><path d="M13 96v-8m13 8v-8" stroke="#62E6FF" stroke-width="5" stroke-linecap="round"/>
+  <path d="M130 46h33m-17-16v33" stroke="#62E6FF" stroke-width="5" stroke-linecap="round"/>
+</svg>
