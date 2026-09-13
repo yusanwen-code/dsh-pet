@@ -5,6 +5,7 @@ import { PetCard } from '@dsh-pet/web'
 import manifestJson from '../../../pets/deepseek/pet.json' with { type: 'json' }
 
 const states: readonly PetState[] = ['idle', 'thinking', 'tool', 'success', 'error']
+const logoUrl = new URL('../../../assets/logo.svg', import.meta.url).href
 const stateCopy: Record<PetState, { title: string; description: string }> = {
   idle: { title: '待命', description: 'Harness 正在等待下一条指令。' },
   thinking: { title: '思考', description: '模型正在生成或整理回复。' },
@@ -46,7 +47,7 @@ export function App() {
   return (
     <main className="workbench">
       <section className="workbench__intro">
-        <div className="eyebrow"><span>DSH</span><i />PET PROTOCOL / 0.1</div>
+        <div className="eyebrow"><img src={logoUrl} alt="dsh-pet" /><i />PET PROTOCOL / 0.1</div>
         <h1>让代理的工作，<br /><em>有生命地发生。</em></h1>
         <p className="lede">dsh-pet 把 DeepSeek Harness 的事件接到任意宠物外观。统一协议就像一根数据线：一端是 Harness，另一端由创造者决定。</p>
 

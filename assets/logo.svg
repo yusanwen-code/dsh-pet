@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">dsh-pet 连接鲸</title>
+  <desc id="desc">由 Harness 框架、鲸形伙伴和连接器尾巴组成的 dsh-pet 标志</desc>
+  <defs>
+    <linearGradient id="bg" x1="72" y1="38" x2="440" y2="474" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101B43"/>
+      <stop offset="1" stop-color="#071027"/>
+    </linearGradient>
+    <linearGradient id="whale" x1="138" y1="164" x2="376" y2="365" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7388FF"/>
+      <stop offset=".55" stop-color="#4D6BFE"/>
+      <stop offset="1" stop-color="#2F4BD8"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+  </defs>
+
+  <rect x="20" y="20" width="472" height="472" rx="116" fill="url(#bg)"/>
+  <path d="M112 78H76v84M400 78h36v84M112 434H76v-84M400 434h36v-84" fill="none" stroke="#4D6BFE" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="386" cy="126" r="14" fill="#69ECFF" filter="url(#glow)" opacity=".8"/>
+  <circle cx="386" cy="126" r="7" fill="#BDF7FF"/>
+
+  <path d="M116 326c-31-28-35-74-10-108 28-39 79-54 128-35 27-35 68-43 103-21-23 15-32 37-24 63 34 11 55 40 53 74-2 53-53 92-119 92-57 0-102-22-131-65Z" fill="url(#whale)" stroke="#89EFFF" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M313 226c33-13 61-3 77 25-23 0-40 10-50 29 25 7 41 23 47 46-32 1-59-13-76-39" fill="#69ECFF" stroke="#0C1738" stroke-width="11" stroke-linejoin="round"/>
+  <path d="M128 315c40 43 113 52 174 19-18 43-68 66-126 50-30-8-52-25-64-48Z" fill="#D9FAFF" opacity=".96"/>
+  <path d="M154 191c-7-25 7-46 36-53-1 22 11 34 34 40" fill="#69ECFF" stroke="#0C1738" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="193" cy="251" r="13" fill="#0C1738"/>
+  <circle cx="198" cy="246" r="4" fill="white"/>
+  <path d="M214 294c19 13 43 13 64-1" fill="none" stroke="#0C1738" stroke-width="10" stroke-linecap="round"/>
+
+  <path d="M132 318H92" fill="none" stroke="#69ECFF" stroke-width="12" stroke-linecap="round"/>
+  <rect x="54" y="295" width="52" height="46" rx="13" fill="#4D6BFE" stroke="#91F1FF" stroke-width="6"/>
+  <path d="M54 309H36v18h18" fill="#69ECFF" stroke="#91F1FF" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M72 309v18M87 309v18" stroke="#D9FAFF" stroke-width="5" stroke-linecap="round"/>
+
+  <rect x="298" y="365" width="118" height="52" rx="26" fill="#0C1738" stroke="#2F477E" stroke-width="3"/>
+  <circle cx="327" cy="391" r="8" fill="#69ECFF"/>
+  <text x="348" y="398" fill="#E7F7FF" font-family="ui-monospace, SFMono-Regular, monospace" font-size="22" font-weight="800" letter-spacing="2">PET</text>
+</svg>
