@@ -5,7 +5,8 @@ import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-session/client'
 import type { PetEvent, PetManifest, PetState } from '@dsh-pet/protocol'
-import { PetCard } from '@dsh-pet/web'
+import { createPetStateMachine, PetCard } from '@dsh-pet/web'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import errorAsset from '../../../pets/deepseek/assets/error.svg'
 import idleAsset from '../../../pets/deepseek/assets/idle.svg'
@@ -40,20 +41,48 @@ const manifest: PetManifest = {
 
 type OverlayProps = PropsRuntime<'conversation.input.overlay'>
 
-function PetOverlay({ sessionId, useProjection, useSession }: OverlayProps) {
+export function PetOverlay({ sessionId, useProjection, useSession }: OverlayProps) {
   const projection = useProjection('dshPet')
   const running = useSession((snapshot: SessionSnapshot) => snapshot.running)
   const lastAgentError = useSession((snapshot: SessionSnapshot) => snapshot.lastAgentError)
   const fallbackState: PetState = lastAgentError ? 'error' : running ? 'thinking' : 'idle'
   const state = projection?.state ?? fallbackState
-  const event: PetEvent = {
+  const sourceEvent = useMemo<PetEvent>(() => ({
     version: '0.1',
     state,
     sessionId,
     timestamp: projection?.timestamp ?? 0,
     ...(projection?.toolName ? { toolName: projection.toolName } : {}),
     ...(lastAgentError ? { message: lastAgentError } : {}),
-  }
+  }), [lastAgentError, projection?.timestamp, projection?.toolName, sessionId, state])
+  const machineRef = useRef<ReturnType<typeof createPetStateMachine> | null>(null)
+  const [event, setEvent] = useState<PetEvent>(sourceEvent)
+
+  useEffect(() => {
+    const machine = createPetStateMachine({ initialSessionId: sessionId })
+    machineRef.current = machine
+    setEvent(machine.current())
+    const unsubscribe = machine.subscribe(setEvent)
+    return () => {
+      unsubscribe()
+      machine.dispose()
+      if (machineRef.current === machine) machineRef.current = null
+    }
+  }, [sessionId])
+
+  useEffect(() => {
+    const machine = machineRef.current
+    if (!machine) return
+    if (sourceEvent.state === 'success' || sourceEvent.state === 'error') {
+      machine.send({
+        version: '0.1',
+        state: 'idle',
+        sessionId: sourceEvent.sessionId,
+        timestamp: sourceEvent.timestamp,
+      })
+    }
+    machine.send(sourceEvent)
+  }, [sourceEvent])
 
   return (
     <div className="dsh-pet-native-overlay">
