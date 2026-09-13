@@ -63,6 +63,15 @@ importers:
 
   packages/protocol: {}
 
+  packages/web:
+    dependencies:
+      '@dsh-pet/protocol':
+        specifier: workspace:*
+        version: link:../protocol
+      react:
+        specifier: ^19.1.1
+        version: 19.3.0
+
 packages:
 
   '@acemir/cssom@0.9.31':
