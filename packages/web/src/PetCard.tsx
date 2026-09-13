@@ -27,7 +27,7 @@ export function PetCard({ manifest, event, fallbackAsset, className = '' }: PetC
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [reaction, setReaction] = useState(0)
   const [assetFailed, setAssetFailed] = useState(false)
-  const normalizedState: PetState = event.state in manifest.assets ? event.state : 'idle'
+  const normalizedState: PetState = Object.hasOwn(manifest.assets, event.state) ? event.state : 'idle'
   const normalizedEvent = normalizedState === event.state ? event : { ...event, state: normalizedState }
   const asset = manifest.assets[normalizedState]
   const label = statusLabel(normalizedEvent)
