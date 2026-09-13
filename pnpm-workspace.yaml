@@ -1,0 +1,11 @@
+packages:
+  - packages/*
+  - apps/*
+  - pets/*
+  - examples/*
+
+allowBuilds:
+  esbuild: true
+
+onlyBuiltDependencies:
+  - esbuild
