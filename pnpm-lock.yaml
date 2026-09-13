@@ -87,22 +87,6 @@ importers:
         version: 4.0.2(@deepseek-ai/cordis-plugin-include@1.0.7)(@deepseek-ai/cordis-plugin-loader@1.0.3)
 
   packages/dsh-plugin:
-    dependencies:
-      '@dsh-pet/core':
-        specifier: workspace:*
-        version: link:../core
-      '@dsh-pet/deepseek-pet':
-        specifier: workspace:*
-        version: link:../../pets/deepseek
-      '@dsh-pet/protocol':
-        specifier: workspace:*
-        version: link:../protocol
-      '@dsh-pet/web':
-        specifier: workspace:*
-        version: link:../web
-      react:
-        specifier: ^19.1.1
-        version: 19.3.0
     devDependencies:
       '@deepseek-ai/cordis':
         specifier: ^4.0.2
@@ -128,9 +112,24 @@ importers:
       '@deepseek-ai/dsh-session-projection':
         specifier: ^0.1.5-rc.1
         version: 0.1.5-rc.2(@deepseek-ai/cordis@4.0.2)(@deepseek-ai/dsh-session@0.1.5-rc.2(@deepseek-ai/cordis@4.0.2)(@deepseek-ai/dsh-scope@0.1.5-rc.2(@deepseek-ai/cordis@4.0.2)(@deepseek-ai/dsh-invariants@0.1.5-rc.2(@deepseek-ai/cordis@4.0.2))))
+      '@dsh-pet/core':
+        specifier: workspace:*
+        version: link:../core
+      '@dsh-pet/deepseek-pet':
+        specifier: workspace:*
+        version: link:../../pets/deepseek
+      '@dsh-pet/protocol':
+        specifier: workspace:*
+        version: link:../protocol
+      '@dsh-pet/web':
+        specifier: workspace:*
+        version: link:../web
       esbuild:
         specifier: ^0.25.10
         version: 0.25.10
+      react:
+        specifier: ^19.1.1
+        version: 19.3.0
       zod:
         specifier: ^4.1.11
         version: 4.6.2

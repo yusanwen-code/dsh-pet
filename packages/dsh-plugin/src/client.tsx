@@ -4,39 +4,24 @@ import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-session/client'
-import type { PetEvent, PetManifest, PetState } from '@dsh-pet/protocol'
+import { validatePetManifest, type PetEvent, type PetManifest, type PetState } from '@dsh-pet/protocol'
 import { createPetStateMachine, PetCard } from '@dsh-pet/web'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { assetUrls, fallbackManifest, manifestInput, validationErrors } from 'dsh-pet:pack'
 
-import errorAsset from '../../../pets/deepseek/assets/error.svg'
-import idleAsset from '../../../pets/deepseek/assets/idle.svg'
-import successAsset from '../../../pets/deepseek/assets/success.svg'
-import thinkingAsset from '../../../pets/deepseek/assets/thinking.svg'
-import toolAsset from '../../../pets/deepseek/assets/tool.svg'
 import petStyles from '../../web/src/pet-card.css'
 
-const assets: Record<PetState, { src: string; alt: string; animation: 'breathe' | 'bob' | 'pulse' | 'shake' | 'celebrate' }> = {
-  idle: { src: idleAsset, alt: '安静待命的连接鲸', animation: 'breathe' },
-  thinking: { src: thinkingAsset, alt: '追逐思绪的连接鲸', animation: 'bob' },
-  tool: { src: toolAsset, alt: '连接工具的连接鲸', animation: 'pulse' },
-  success: { src: successAsset, alt: '庆祝任务完成的连接鲸', animation: 'celebrate' },
-  error: { src: errorAsset, alt: '检查故障的连接鲸', animation: 'shake' },
-}
-
+const validated = validatePetManifest(manifestInput)
+const baseManifest = validated.ok ? validated.value : fallbackManifest
 const manifest: PetManifest = {
-  protocolVersion: '0.1',
-  id: 'deepsea-connector',
-  name: '连接鲸',
-  description: '把 DeepSeek Harness 的工作节奏变成看得见的陪伴。',
-  author: 'dsh-pet contributors',
-  assets,
-  capabilities: [
-    {
-      name: 'pet.wave',
-      description: '向用户挥鳍问候。此能力在 0.1 中只声明、不执行。',
-      version: '0.1',
-    },
-  ],
+  ...baseManifest,
+  description: validationErrors.length > 0
+    ? `${baseManifest.description} 自定义宠物包无效，已回退默认外观：${validationErrors.join('；')}`
+    : baseManifest.description,
+  assets: Object.fromEntries(Object.entries(baseManifest.assets).map(([state, asset]) => [
+    state,
+    { ...asset, src: assetUrls[state as PetState] },
+  ])) as PetManifest['assets'],
 }
 
 type OverlayProps = PropsRuntime<'conversation.input.overlay'>
@@ -86,7 +71,7 @@ export function PetOverlay({ sessionId, useProjection, useSession }: OverlayProp
 
   return (
     <div className="dsh-pet-native-overlay">
-      <PetCard manifest={manifest} event={event} fallbackAsset={idleAsset} />
+      <PetCard manifest={manifest} event={event} fallbackAsset={assetUrls.idle} />
     </div>
   )
 }

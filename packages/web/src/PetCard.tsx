@@ -27,21 +27,23 @@ export function PetCard({ manifest, event, fallbackAsset, className = '' }: PetC
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [reaction, setReaction] = useState(0)
   const [assetFailed, setAssetFailed] = useState(false)
-  const asset = manifest.assets[event.state] ?? manifest.assets.idle
-  const label = statusLabel(event)
+  const normalizedState: PetState = event.state in manifest.assets ? event.state : 'idle'
+  const normalizedEvent = normalizedState === event.state ? event : { ...event, state: normalizedState }
+  const asset = manifest.assets[normalizedState]
+  const label = statusLabel(normalizedEvent)
 
   useEffect(() => setAssetFailed(false), [asset.src])
   const imageSrc = assetFailed ? fallbackAsset : asset.src
   const classes = useMemo(
-    () => ['dsh-pet', `dsh-pet--${event.state}`, reaction % 2 ? 'dsh-pet--hello' : '', className]
+    () => ['dsh-pet', `dsh-pet--${normalizedState}`, reaction % 2 ? 'dsh-pet--hello' : '', className]
       .filter(Boolean)
       .join(' '),
-    [className, event.state, reaction],
+    [className, normalizedState, reaction],
   )
 
   if (collapsed) {
     return (
-      <button className="dsh-pet__dock" type="button" aria-label="展开宠物" onClick={() => setCollapsed(false)}>
+      <button className="dsh-pet dsh-pet__dock" type="button" aria-label="展开宠物" onClick={() => setCollapsed(false)}>
         <span aria-hidden="true">◉</span>
         <span>{manifest.name}</span>
       </button>
@@ -49,7 +51,7 @@ export function PetCard({ manifest, event, fallbackAsset, className = '' }: PetC
   }
 
   return (
-    <aside className={classes} data-state={event.state}>
+    <aside className={classes} data-state={normalizedState}>
       <div className="dsh-pet__cable" aria-hidden="true"><span /></div>
       <header className="dsh-pet__topbar">
         <span className="dsh-pet__protocol">PET / 0.1</span>
@@ -65,7 +67,7 @@ export function PetCard({ manifest, event, fallbackAsset, className = '' }: PetC
         <span className="dsh-pet__halo" aria-hidden="true" />
         <img
           data-testid="pet-art"
-          data-state={event.state}
+          data-state={normalizedState}
           className={`dsh-pet__art dsh-pet__art--${asset.animation ?? 'breathe'}`}
           src={imageSrc}
           alt={asset.alt}

@@ -21,7 +21,7 @@ function isNonEmptyString(value: unknown): value is string {
 
 function isSafeAssetPath(value: string): boolean {
   if (!/\.(?:svg|png)$/i.test(value)) return false
-  if (/^(?:[a-z]+:|\/|\\)/i.test(value)) return false
+  if (/^(?:[a-z]+:|\/|\\)/i.test(value) || value.includes('%')) return false
   return !value.split(/[\\/]/).some((part) => part === '..' || part === '')
 }
 

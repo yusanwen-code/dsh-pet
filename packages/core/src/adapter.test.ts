@@ -7,9 +7,9 @@ describe('mapHarnessEvent', () => {
     [{ type: 'agent/assistant-stream', frame: { type: 'start' } }, 'thinking'],
     [{ type: 'agent/assistant-stream', frame: { type: 'chunk' } }, 'thinking'],
     [{ type: 'tool/result' }, 'thinking'],
-    [{ type: 'turn/end', data: { status: 'success' } }, 'success'],
-    [{ type: 'assistant/attempt', data: { status: 'failed' } }, 'error'],
-    [{ type: 'assistant/attempt', data: { status: 'cancelled' } }, 'error'],
+    [{ type: 'turn/end', data: { reason: { kind: 'completed' } } }, 'success'],
+    [{ type: 'turn/end', data: { reason: { kind: 'error' } } }, 'error'],
+    [{ type: 'turn/end', data: { reason: { kind: 'aborted' } } }, 'error'],
   ] as const)('maps %o to %s', (input, state) => {
     expect(mapHarnessEvent('session-7', input, 1234)).toMatchObject({
       version: '0.1',
@@ -31,6 +31,7 @@ describe('mapHarnessEvent', () => {
 
   it('ignores unknown and malformed events', () => {
     expect(mapHarnessEvent('session-7', { type: 'future/event' }, 1234)).toBeUndefined()
+    expect(mapHarnessEvent('session-7', { type: 'assistant/attempt', data: {} }, 1234)).toBeUndefined()
     expect(mapHarnessEvent('session-7', null, 1234)).toBeUndefined()
   })
 })

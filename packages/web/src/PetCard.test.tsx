@@ -66,4 +66,11 @@ describe('PetCard', () => {
     fireEvent.error(image)
     expect(image).toHaveAttribute('src', '/fallback.svg')
   })
+
+  it('normalizes a future state to idle', () => {
+    render(<PetCard manifest={manifest} event={{ ...event('idle'), state: 'future' } as PetEvent} fallbackAsset="/fallback.svg" />)
+
+    expect(screen.getByRole('status')).toHaveAccessibleName('待命中')
+    expect(screen.getByTestId('pet-art')).toHaveAttribute('data-state', 'idle')
+  })
 })

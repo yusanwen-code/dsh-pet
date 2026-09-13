@@ -17,7 +17,7 @@
 }
 
 .dsh-pet button { color: inherit; font: inherit; }
-.dsh-pet button:focus-visible, .dsh-pet__dock:focus-visible { outline: 3px solid var(--pet-cyan); outline-offset: 3px; }
+.dsh-pet button:focus-visible, .dsh-pet.dsh-pet__dock:focus-visible { outline: 3px solid var(--pet-cyan); outline-offset: 3px; }
 
 .dsh-pet__cable {
   position: absolute;
@@ -92,8 +92,8 @@
 .dsh-pet__details code { color: var(--pet-blue); }
 .dsh-pet__details li span { color: #8c96ae; }
 
-.dsh-pet__dock { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.62rem 0.8rem; border: 1px solid rgba(77,107,254,.25); border-radius: 999px; background: rgba(247,250,255,.94); color: #111a38; box-shadow: 0 .8rem 2rem rgba(26,46,106,.16); cursor: pointer; font: 700 0.75rem/1 "Avenir Next", "Noto Sans SC", sans-serif; }
-.dsh-pet__dock span:first-child { color: var(--pet-blue); text-shadow: 0 0 0.7rem var(--pet-cyan); }
+.dsh-pet.dsh-pet__dock { display: inline-flex; align-items: center; width: auto; overflow: visible; gap: 0.5rem; padding: 0.62rem 0.8rem; border: 1px solid rgba(77,107,254,.25); border-radius: 999px; background: rgba(247,250,255,.94); color: #111a38; box-shadow: 0 .8rem 2rem rgba(26,46,106,.16); cursor: pointer; font: 700 0.75rem/1 "Avenir Next", "Noto Sans SC", sans-serif; }
+.dsh-pet.dsh-pet__dock span:first-child { color: var(--pet-blue); text-shadow: 0 0 0.7rem var(--pet-cyan); }
 
 @keyframes dsh-pet-signal { from { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } to { transform: translateY(3.2rem); opacity: 0; } }
 @keyframes dsh-pet-breathe { 50% { transform: translateY(-0.18rem) scale(1.025); } }

@@ -52,6 +52,14 @@ pnpm typecheck
 pnpm build
 ```
 
+构建一个自定义宠物包时，传入它的目录即可；协议、核心和 UI 代码都不用修改：
+
+```bash
+DSH_PET_PACK=examples/minimal-pet pnpm --filter @dsh-pet/plugin build
+```
+
+无效的 manifest 会在构建后的宠物详情中报告，并自动使用默认“连接鲸”。
+
 ## 原生接入 DeepSeek Harness
 
 先在本仓库完成构建，再用 DSH 官方插件命令把本地 bundle 加入 Web profile：

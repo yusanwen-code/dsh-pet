@@ -26,15 +26,8 @@ export function mapHarnessEvent(
   }
   if (input.type === 'tool/result') return { ...base, state: 'thinking' }
   if (input.type === 'turn/end') {
-    const status = isRecord(input.data) ? input.data.status : undefined
-    return status === 'failed' || status === 'cancelled'
-      ? { ...base, state: 'error' }
-      : { ...base, state: 'success' }
-  }
-  if (input.type === 'assistant/attempt' && isRecord(input.data)) {
-    if (input.data.status === 'failed' || input.data.status === 'cancelled') {
-      return { ...base, state: 'error' }
-    }
+    const reason = isRecord(input.data) && isRecord(input.data.reason) ? input.data.reason.kind : undefined
+    return reason === 'completed' ? { ...base, state: 'success' } : { ...base, state: 'error' }
   }
   return undefined
 }

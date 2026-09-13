@@ -1,10 +1,9 @@
-import type { PetState } from '@dsh-pet/protocol'
 import type { ProjectionDefinition } from '@deepseek-ai/dsh-session-projection'
 import type { SessionEvent } from '@deepseek-ai/dsh-session'
 import { z } from 'zod'
 
 export interface PetProjection {
-  state: PetState
+  state: 'idle' | 'thinking' | 'tool' | 'success' | 'error'
   timestamp: number
   toolName?: string | undefined
 }
@@ -63,8 +62,7 @@ export function reducePetProjection(state: PetProjection, event: EventLike): Pet
 
   if (event.type === 'turn/end') {
     const kind = turnEndKind(event.data)
-    const failed = ['aborted', 'cancelled', 'failed', 'interrupted', 'error', 'rejected'].includes(kind ?? '')
-    return { state: failed ? 'error' : 'success', timestamp: event.time }
+    return { state: kind === 'completed' ? 'success' : 'error', timestamp: event.time }
   }
 
   return state

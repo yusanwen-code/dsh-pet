@@ -30,7 +30,7 @@ describe('validatePetManifest', () => {
     }
   })
 
-  it.each(['https://host/pet.svg', '/tmp/pet.svg', '../pet.svg', 'pet.webp'])(
+  it.each(['https://host/pet.svg', '/tmp/pet.svg', '../pet.svg', 'pet.webp', '%2e%2e/%2e%2e/secret.svg'])(
     'rejects unsafe asset path %s',
     (src) => {
       const result = validatePetManifest({
