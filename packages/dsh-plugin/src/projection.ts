@@ -63,7 +63,7 @@ export function reducePetProjection(state: PetProjection, event: EventLike): Pet
 
   if (event.type === 'turn/end') {
     const kind = turnEndKind(event.data)
-    const failed = ['cancelled', 'failed', 'interrupted', 'error'].includes(kind ?? '')
+    const failed = ['aborted', 'cancelled', 'failed', 'interrupted', 'error', 'rejected'].includes(kind ?? '')
     return { state: failed ? 'error' : 'success', timestamp: event.time }
   }
 

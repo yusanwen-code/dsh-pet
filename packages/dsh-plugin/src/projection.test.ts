@@ -22,6 +22,7 @@ describe('pet session projection', () => {
 
     expect(reducePetProjection(active, event('turn/end', { reason: { kind: 'completed' } }))).toMatchObject({ state: 'success' })
     expect(reducePetProjection(active, event('turn/end', { reason: { kind: 'error' } }))).toMatchObject({ state: 'error' })
+    expect(reducePetProjection(active, event('turn/end', { reason: { kind: 'aborted' } }))).toMatchObject({ state: 'error' })
   })
 
   it('returns the same reference for unrelated events', () => {
