@@ -46,14 +46,14 @@ describe('PetCard', () => {
     expect(screen.getByText('pet.wave')).toBeVisible()
   })
 
-  it('collapses to a compact control and can reopen', async () => {
+  it('can close to a persistent whale toggle and reopen', async () => {
     const user = userEvent.setup()
     render(<PetCard manifest={manifest} event={event('idle')} fallbackAsset="/fallback.svg" />)
 
-    await user.click(screen.getByRole('button', { name: '收起宠物' }))
-    expect(screen.getByRole('button', { name: '展开宠物' })).toBeVisible()
+    await user.click(screen.getByRole('button', { name: '关闭宠物' }))
+    expect(screen.getByRole('button', { name: '开启宠物' })).toBeVisible()
     expect(screen.queryByTestId('pet-art')).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: '展开宠物' }))
+    await user.click(screen.getByRole('button', { name: '开启宠物' }))
     expect(screen.getByTestId('pet-art')).toBeVisible()
   })
 

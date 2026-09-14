@@ -7,6 +7,7 @@ import type {} from '@deepseek-ai/dsh-client-ui-session/client'
 import { validatePetManifest, type PetEvent, type PetManifest, type PetState } from '@dsh-pet/protocol'
 import { createPetStateMachine, PetCard } from '@dsh-pet/web'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { assetUrls, fallbackManifest, manifestInput, validationErrors } from 'dsh-pet:pack'
 
 import petStyles from '../../web/src/pet-card.css'
@@ -69,10 +70,13 @@ export function PetOverlay({ sessionId, useProjection, useSession }: OverlayProp
     machine.send(sourceEvent)
   }, [sourceEvent])
 
-  return (
+  // The composer slot gives us the active session. Portal the visual to body so
+  // it is not clipped by the composer and can receive pointer events anywhere.
+  return createPortal(
     <div className="dsh-pet-native-overlay">
-      <PetCard manifest={manifest} event={event} fallbackAsset={assetUrls.idle} />
-    </div>
+      <PetCard manifest={manifest} event={event} fallbackAsset={assetUrls.idle} persistPreferences />
+    </div>,
+    document.body,
   )
 }
 
@@ -83,7 +87,7 @@ export function apply(ctx: Context): void {
   ctx.effect(() => {
     const style = document.createElement('style')
     style.dataset.dshPet = '0.1'
-    style.textContent = `${petStyles}\n.dsh-pet-native-overlay{position:fixed;right:1.25rem;bottom:1.25rem;z-index:20;pointer-events:auto}`
+    style.textContent = `${petStyles}\n.dsh-pet-native-overlay{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:visible}.dsh-pet-native-overlay>.dsh-pet{position:fixed;right:1.25rem;bottom:1.25rem;pointer-events:auto}`
     document.head.append(style)
     return () => style.remove()
   })

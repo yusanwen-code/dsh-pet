@@ -68,7 +68,7 @@ const client = await build({
   write: false,
   loader: { '.svg': 'dataurl', '.css': 'text' },
   plugins: [petPackModule],
-  external: ['react', 'react/jsx-runtime'],
+  external: ['react', 'react/jsx-runtime', 'react-dom'],
 })
 
 const body = client.outputFiles[0]?.text

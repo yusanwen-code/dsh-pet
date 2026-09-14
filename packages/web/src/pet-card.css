@@ -92,8 +92,8 @@
 .dsh-pet__details code { color: var(--pet-cyan); }
 .dsh-pet__details li span { color: #94a2c4; }
 
-.dsh-pet.dsh-pet__dock { display: inline-flex; width: auto; min-width: auto; align-items: center; gap: 0.42rem; padding: 0.35rem 0.58rem; color: #eaf1ff; background: rgba(10, 20, 51, 0.92); border: 1px solid rgba(151, 177, 255, 0.38); border-radius: 999px; box-shadow: 0 0.6rem 1.6rem rgba(1, 8, 30, 0.28); cursor: pointer; font: 700 0.68rem/1 "Avenir Next", "Noto Sans SC", sans-serif; }
-.dsh-pet.dsh-pet__dock img { width: 1.5rem; height: 1.5rem; object-fit: contain; }
+.dsh-pet.dsh-pet__dock { display: grid; width: 3.25rem; min-width: 0; padding: 0; place-items: center; cursor: pointer; }
+.dsh-pet.dsh-pet__dock img { width: 3.25rem; height: 2.6rem; object-fit: contain; filter: drop-shadow(0 0.45rem 0.8rem rgba(3, 12, 44, 0.3)); }
 
 @keyframes dsh-pet-breathe { 50% { transform: translateY(-0.18rem) scale(1.025); } }
 @keyframes dsh-pet-bob { 50% { transform: translateY(-0.55rem) rotate(1.5deg); } }

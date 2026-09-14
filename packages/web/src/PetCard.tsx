@@ -7,6 +7,8 @@ export interface PetCardProps {
   event: PetEvent
   fallbackAsset: string
   className?: string
+  /** Keep placement and visibility between DSH restarts. */
+  persistPreferences?: boolean
 }
 
 const stateLabels: Record<PetState, string> = {
@@ -25,17 +27,45 @@ interface DragStart {
   originY: number
 }
 
+const positionStorageKey = 'dsh-pet.position.v1'
+const visibilityStorageKey = 'dsh-pet.collapsed.v1'
+const initialPosition = { x: 0, y: 0 }
+
+function readPosition(): typeof initialPosition {
+  try {
+    const value: unknown = JSON.parse(window.localStorage.getItem(positionStorageKey) ?? 'null')
+    if (
+      typeof value === 'object' && value !== null
+      && Number.isFinite((value as { x?: unknown }).x)
+      && Number.isFinite((value as { y?: unknown }).y)
+    ) {
+      return { x: (value as { x: number }).x, y: (value as { y: number }).y }
+    }
+  } catch {
+    // Local storage is optional (for example, in a private DSH profile).
+  }
+  return initialPosition
+}
+
+function readCollapsed(): boolean {
+  try {
+    return window.localStorage.getItem(visibilityStorageKey) === 'true'
+  } catch {
+    return false
+  }
+}
+
 function statusLabel(event: PetEvent): string {
   if (event.state === 'tool' && event.toolName) return `正在使用 ${event.toolName}`
   return stateLabels[event.state]
 }
 
-export function PetCard({ manifest, event, fallbackAsset, className = '' }: PetCardProps) {
-  const [collapsed, setCollapsed] = useState(false)
+export function PetCard({ manifest, event, fallbackAsset, className = '', persistPreferences = false }: PetCardProps) {
+  const [collapsed, setCollapsed] = useState(() => persistPreferences && readCollapsed())
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [reaction, setReaction] = useState(0)
   const [assetFailed, setAssetFailed] = useState(false)
-  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [position, setPosition] = useState(() => persistPreferences ? readPosition() : initialPosition)
   const [dragging, setDragging] = useState(false)
   const drag = useRef<DragStart | null>(null)
   const didDrag = useRef(false)
@@ -45,6 +75,22 @@ export function PetCard({ manifest, event, fallbackAsset, className = '' }: PetC
   const label = statusLabel(normalizedEvent)
 
   useEffect(() => setAssetFailed(false), [asset.src])
+  useEffect(() => {
+    if (!persistPreferences) return
+    try {
+      window.localStorage.setItem(positionStorageKey, JSON.stringify(position))
+    } catch {
+      // The pet remains movable even when its host does not allow persistence.
+    }
+  }, [persistPreferences, position])
+  useEffect(() => {
+    if (!persistPreferences) return
+    try {
+      window.localStorage.setItem(visibilityStorageKey, String(collapsed))
+    } catch {
+      // The in-memory preference still works for this DSH session.
+    }
+  }, [collapsed, persistPreferences])
   const imageSrc = assetFailed ? fallbackAsset : asset.src
   const classes = useMemo(
     () => ['dsh-pet', `dsh-pet--${normalizedState}`, dragging ? 'dsh-pet--dragging' : '', reaction % 2 ? 'dsh-pet--hello' : '', className]
@@ -84,9 +130,8 @@ export function PetCard({ manifest, event, fallbackAsset, className = '' }: PetC
 
   if (collapsed) {
     return (
-      <button className="dsh-pet dsh-pet__dock" type="button" aria-label="展开宠物" onClick={() => setCollapsed(false)}>
+      <button className="dsh-pet dsh-pet__dock" type="button" aria-label="开启宠物" onClick={() => setCollapsed(false)}>
         <img src={imageSrc} alt="" aria-hidden="true" />
-        <span>{manifest.name}</span>
       </button>
     )
   }
@@ -110,7 +155,7 @@ export function PetCard({ manifest, event, fallbackAsset, className = '' }: PetC
           >
             {detailsOpen ? '×' : 'i'}
           </button>
-          <button className="dsh-pet__collapse" type="button" aria-label="收起宠物" onClick={() => setCollapsed(true)}>−</button>
+          <button className="dsh-pet__collapse" type="button" aria-label="关闭宠物" onClick={() => setCollapsed(true)}>−</button>
         </div>
       </div>
       <div className="dsh-pet__signal-line" aria-hidden="true" />
