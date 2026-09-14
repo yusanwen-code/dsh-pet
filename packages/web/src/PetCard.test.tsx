@@ -73,4 +73,15 @@ describe('PetCard', () => {
     expect(screen.getByRole('status')).toHaveAccessibleName('待命中')
     expect(screen.getByTestId('pet-art')).toHaveAttribute('data-state', 'idle')
   })
+
+  it('moves the transparent pet shell when the whale is dragged', () => {
+    render(<PetCard manifest={manifest} event={event('idle')} fallbackAsset="/fallback.svg" />)
+    const stage = screen.getByRole('button', { name: '拖动或与连接鲸互动' })
+
+    fireEvent.pointerDown(stage, { pointerId: 1, clientX: 20, clientY: 30 })
+    fireEvent.pointerMove(stage, { pointerId: 1, clientX: 74, clientY: 86 })
+    fireEvent.pointerUp(stage, { pointerId: 1, clientX: 74, clientY: 86 })
+
+    expect(stage.closest('[data-state]')).toHaveStyle({ transform: 'translate3d(54px, 56px, 0)' })
+  })
 })

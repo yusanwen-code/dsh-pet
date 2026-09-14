@@ -83,7 +83,7 @@ export function apply(ctx: Context): void {
   ctx.effect(() => {
     const style = document.createElement('style')
     style.dataset.dshPet = '0.1'
-    style.textContent = `${petStyles}\n.dsh-pet-native-overlay{position:absolute;right:1rem;bottom:calc(100% + 1rem);z-index:20;pointer-events:auto}`
+    style.textContent = `${petStyles}\n.dsh-pet-native-overlay{position:fixed;right:1.25rem;bottom:1.25rem;z-index:20;pointer-events:auto}`
     document.head.append(style)
     return () => style.remove()
   })
