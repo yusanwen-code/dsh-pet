@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import type { PetEvent, PetManifest, PetState } from '@dsh-pet/protocol'
@@ -36,14 +35,11 @@ function event(state: PetState, toolName?: string): PetEvent {
 }
 
 describe('PetCard', () => {
-  it('shows the current tool and expands pet details', async () => {
-    const user = userEvent.setup()
+  it('shows the current tool without an unnecessary info control', () => {
     render(<PetCard manifest={manifest} event={event('tool', 'bash')} fallbackAsset="/fallback.svg" />)
 
     expect(screen.getByRole('status')).toHaveAccessibleName('正在使用 bash')
-    await user.click(screen.getByRole('button', { name: '查看宠物详情' }))
-    expect(screen.getByText('协议 0.1')).toBeVisible()
-    expect(screen.getByText('pet.wave')).toBeVisible()
+    expect(screen.queryByRole('button', { name: '查看宠物详情' })).not.toBeInTheDocument()
   })
 
   it('keeps the full whale visible without a minimise control', () => {

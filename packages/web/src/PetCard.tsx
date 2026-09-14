@@ -52,7 +52,6 @@ function statusLabel(event: PetEvent): string {
 }
 
 export function PetCard({ manifest, event, fallbackAsset, className = '', persistPreferences = false }: PetCardProps) {
-  const [detailsOpen, setDetailsOpen] = useState(false)
   const [reaction, setReaction] = useState(0)
   const [assetFailed, setAssetFailed] = useState(false)
   const [position, setPosition] = useState(() => persistPreferences ? readPosition() : initialPosition)
@@ -120,15 +119,6 @@ export function PetCard({ manifest, event, fallbackAsset, className = '', persis
         <div className="dsh-pet__bubble-meta"><span>PET / 0.1</span><span className="dsh-pet__signal" aria-hidden="true" /></div>
         <div className="dsh-pet__bubble-main">
           <div><strong>{manifest.name}</strong><span role="status" aria-label={label}>{label}</span></div>
-          <button
-            className="dsh-pet__details-toggle"
-            type="button"
-            aria-label={detailsOpen ? '关闭宠物详情' : '查看宠物详情'}
-            aria-expanded={detailsOpen}
-            onClick={() => setDetailsOpen((value) => !value)}
-          >
-            {detailsOpen ? '×' : 'i'}
-          </button>
         </div>
       </div>
       <div className="dsh-pet__signal-line" aria-hidden="true" />
@@ -159,23 +149,6 @@ export function PetCard({ manifest, event, fallbackAsset, className = '', persis
           onError={() => { if (!assetFailed) setAssetFailed(true) }}
         />
       </button>
-
-      {detailsOpen && (
-        <section className="dsh-pet__details">
-          <p>{manifest.description}</p>
-          <div><span>协议 0.1</span><span>作者 {manifest.author}</span></div>
-          {(manifest.capabilities?.length ?? 0) > 0 && (
-            <ul aria-label="未来能力">
-              {manifest.capabilities?.map((capability) => (
-                <li key={capability.name}>
-                  <code>{capability.name}</code>
-                  <span>仅声明</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      )}
     </aside>
   )
 }

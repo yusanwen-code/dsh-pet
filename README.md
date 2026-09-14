@@ -33,7 +33,7 @@ Think of it as USB-C for pets: Harness emits a small common event vocabulary, an
 - Reads current session state through Session Projection, without polling or mutating a session.
 - Renders five states: `idle`, `thinking`, `tool`, `success`, and `error`.
 - Shows a tool name during tool work, with distinct success and error feedback.
-- Supports local click reactions, a persistent global drag position, a live Settings switch that fully shows or hides the pet, and a details panel.
+- Supports local click reactions, a persistent global drag position, and a live Settings switch that fully shows or hides the pet.
 - Replaces the pet through `pet.json` plus local SVG/PNG assets—without changing the protocol or core runtime.
 - Reserves `capabilities` for future use; version 0.1 exposes metadata only and has no invocation path.
 
