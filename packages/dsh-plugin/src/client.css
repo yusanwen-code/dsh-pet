@@ -1,15 +1,8 @@
-.dsh-pet-native-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 2147483000;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.dsh-pet-native-overlay > .dsh-pet {
+.dsh-pet.dsh-pet--native-overlay {
   position: fixed;
   right: 1.25rem;
   bottom: 1.25rem;
+  z-index: 100;
   pointer-events: auto;
 }
 

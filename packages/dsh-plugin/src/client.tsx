@@ -119,12 +119,16 @@ export function PetOverlay({ sessionId, useProjection, useSession, petSettings }
 
   if (!enabled) return null
 
-  // The composer slot gives us the active session. Portal the visual to body so
-  // it is not clipped by the composer and can receive pointer events anywhere.
+  // The composer slot gives us the active session. Portal only the pet itself
+  // to body: a full-screen transparent wrapper could intercept DSH controls.
   return createPortal(
-    <div className="dsh-pet-native-overlay">
-      <PetCard manifest={manifest} event={event} fallbackAsset={assetUrls.idle} persistPreferences />
-    </div>,
+    <PetCard
+      className="dsh-pet--native-overlay"
+      manifest={manifest}
+      event={event}
+      fallbackAsset={assetUrls.idle}
+      persistPreferences
+    />,
     document.body,
   )
 }

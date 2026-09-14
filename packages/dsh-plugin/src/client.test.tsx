@@ -72,6 +72,8 @@ describe('native pet overlay', () => {
 
     render(<><PetSettingsRow petSettings={props.petSettings} /><PetOverlay {...props} /></>)
     expect(screen.getByTestId('pet-art')).toBeVisible()
+    expect(document.body.querySelector('.dsh-pet-native-overlay')).not.toBeInTheDocument()
+    expect(screen.getByTestId('pet-art').closest('.dsh-pet--native-overlay')).toBeInTheDocument()
 
     await user.click(screen.getByRole('switch', { name: '关闭宠物' }))
     expect(screen.queryByTestId('pet-art')).not.toBeInTheDocument()
