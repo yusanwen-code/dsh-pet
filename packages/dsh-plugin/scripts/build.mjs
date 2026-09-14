@@ -56,7 +56,7 @@ await build({
   format: 'esm',
   platform: 'node',
   target: 'node22',
-  external: ['@deepseek-ai/cordis', '@deepseek-ai/dsh-session-projection'],
+  external: ['@deepseek-ai/cordis', '@deepseek-ai/dsh-session-projection', '@deepseek-ai/schemastery'],
 })
 
 const client = await build({

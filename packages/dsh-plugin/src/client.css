@@ -1,0 +1,40 @@
+.dsh-pet-native-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.dsh-pet-native-overlay > .dsh-pet {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  pointer-events: auto;
+}
+
+.dsh-pet-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  color: inherit;
+  border-bottom: 1px solid rgba(128, 145, 180, 0.18);
+}
+
+.dsh-pet-settings-row > div { display: grid; gap: 0.2rem; }
+.dsh-pet-settings-row strong { font-size: 0.88rem; }
+.dsh-pet-settings-row span { color: #8c9ab8; font-size: 0.76rem; }
+
+.dsh-pet-settings-row button {
+  padding: 0.38rem 0.64rem;
+  color: inherit;
+  background: rgba(70, 100, 245, 0.16);
+  border: 1px solid rgba(100, 130, 255, 0.42);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font: 600 0.75rem/1 system-ui, sans-serif;
+}
+
+.dsh-pet-settings-row button:disabled { cursor: not-allowed; opacity: 0.6; }

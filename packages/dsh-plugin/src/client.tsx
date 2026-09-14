@@ -1,17 +1,20 @@
 import type { Context } from '@deepseek-ai/cordis'
 import type { SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
+import type { InjectFace, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-session/client'
 import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
+import type { SettingsScope } from '@deepseek-ai/dsh-client-ui-settings/client'
 import { validatePetManifest, type PetEvent, type PetManifest, type PetState } from '@dsh-pet/protocol'
 import { createPetStateMachine, PetCard } from '@dsh-pet/web'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { assetUrls, fallbackManifest, manifestInput, validationErrors } from 'dsh-pet:pack'
 
 import petStyles from '../../web/src/pet-card.css'
+import nativeStyles from './client.css'
+import { PET_ENABLED_FIELD, PET_SETTINGS_NAMESPACE, type PetSettings } from './settings-contract.js'
 
 const validated = validatePetManifest(manifestInput)
 const baseManifest = validated.ok ? validated.value : fallbackManifest
@@ -26,62 +29,52 @@ const manifest: PetManifest = {
   ])) as PetManifest['assets'],
 }
 
-type OverlayProps = PropsRuntime<'conversation.input.overlay'>
-const enabledStorageKey = 'dsh-pet.enabled.v1'
-const enabledChangeEvent = 'dsh-pet:enabled-change'
-
-function readEnabled(): boolean {
-  try {
-    return window.localStorage.getItem(enabledStorageKey) !== 'false'
-  } catch {
-    return true
-  }
+interface PetSettingsInjected {
+  petSettings: SettingsScope<PetSettings>
 }
 
-function writeEnabled(enabled: boolean): void {
-  try {
-    window.localStorage.setItem(enabledStorageKey, String(enabled))
-  } catch {
-    // DSH can still apply the preference until the current page is closed.
+type OverlayProps = PropsRuntime<'conversation.input.overlay'> & InjectFace<PetSettingsInjected>
+type SettingsRowProps = PropsRuntime<'settings.general.item'> & InjectFace<PetSettingsInjected>
+
+function usePetEnabled(scope: SettingsScope<PetSettings>) {
+  const snapshot = useSyncExternalStore(
+    (listener) => scope.subscribe(listener),
+    () => scope.getSnapshot(),
+    () => scope.getSnapshot(),
+  )
+  const enabled = snapshot.value?.enabled ?? true
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+
+  const setEnabled = (next: boolean) => {
+    setSaving(true)
+    setSaveError(null)
+    void scope.set(PET_ENABLED_FIELD, next).catch(() => {
+      setSaveError('无法保存设置')
+    }).finally(() => {
+      setSaving(false)
+    })
   }
-  window.dispatchEvent(new CustomEvent<boolean>(enabledChangeEvent, { detail: enabled }))
-}
 
-function usePetEnabled(): [boolean, (enabled: boolean) => void] {
-  const [enabled, setEnabled] = useState(readEnabled)
-
-  useEffect(() => {
-    const onChange = (event: Event) => setEnabled((event as CustomEvent<boolean>).detail)
-    const onStorage = (event: StorageEvent) => {
-      if (event.key === enabledStorageKey) setEnabled(event.newValue !== 'false')
-    }
-    window.addEventListener(enabledChangeEvent, onChange)
-    window.addEventListener('storage', onStorage)
-    return () => {
-      window.removeEventListener(enabledChangeEvent, onChange)
-      window.removeEventListener('storage', onStorage)
-    }
-  }, [])
-
-  return [enabled, writeEnabled]
+  return { enabled, setEnabled, saving, saveError, writable: snapshot.writable && snapshot.status === 'ready' }
 }
 
 /** A first-class DSH Settings row; hiding is complete, not a visual minimise. */
-export function PetSettingsRow() {
-  const [enabled, setEnabled] = usePetEnabled()
+export function PetSettingsRow({ petSettings }: SettingsRowProps) {
+  const { enabled, saveError, saving, setEnabled, writable } = usePetEnabled(petSettings)
 
   return (
     <section className="dsh-pet-settings-row">
-      <div><strong>连接鲸</strong><span>在工作区显示 DeepSeek Harness 宠物</span></div>
-      <button type="button" role="switch" aria-checked={enabled} onClick={() => setEnabled(!enabled)}>
+      <div><strong>连接鲸</strong><span>{saveError ?? '在工作区显示 DeepSeek Harness 宠物'}</span></div>
+      <button type="button" role="switch" aria-checked={enabled} disabled={!writable || saving} onClick={() => setEnabled(!enabled)}>
         {enabled ? '关闭宠物' : '显示宠物'}
       </button>
     </section>
   )
 }
 
-export function PetOverlay({ sessionId, useProjection, useSession }: OverlayProps) {
-  const [enabled] = usePetEnabled()
+export function PetOverlay({ sessionId, useProjection, useSession, petSettings }: OverlayProps) {
+  const { enabled } = usePetEnabled(petSettings)
   const projection = useProjection('dshPet')
   const running = useSession((snapshot: SessionSnapshot) => snapshot.running)
   const lastAgentError = useSession((snapshot: SessionSnapshot) => snapshot.lastAgentError)
@@ -137,13 +130,14 @@ export function PetOverlay({ sessionId, useProjection, useSession }: OverlayProp
 }
 
 export const name = 'dsh-pet-client'
-export const inject = ['slots'] as const
+export const inject = ['slots', 'settingsScope'] as const
 
 export function apply(ctx: Context): void {
+  const petSettings = ctx.settingsScope.bind<PetSettings>({ namespace: PET_SETTINGS_NAMESPACE })
   ctx.effect(() => {
     const style = document.createElement('style')
     style.dataset.dshPet = '0.1'
-    style.textContent = `${petStyles}\n.dsh-pet-native-overlay{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:visible}.dsh-pet-native-overlay>.dsh-pet{position:fixed;right:1.25rem;bottom:1.25rem;pointer-events:auto}.dsh-pet-settings-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 0;border-bottom:1px solid rgba(128,145,180,.18);color:inherit}.dsh-pet-settings-row>div{display:grid;gap:.2rem}.dsh-pet-settings-row strong{font-size:.88rem}.dsh-pet-settings-row span{color:#8c9ab8;font-size:.76rem}.dsh-pet-settings-row button{padding:.38rem .64rem;border:1px solid rgba(100,130,255,.42);border-radius:.5rem;background:rgba(70,100,245,.16);color:inherit;cursor:pointer;font:600 .75rem/1 system-ui,sans-serif}`
+    style.textContent = `${petStyles}\n${nativeStyles}`
     document.head.append(style)
     return () => style.remove()
   })
@@ -152,11 +146,13 @@ export function apply(ctx: Context): void {
     name: 'conversation.input.overlay',
     id: 'dsh-pet',
     order: 100,
+    inject: () => ({ petSettings }),
   }, PetOverlay))
 
   ctx.slots.inject('settings.general.item', () => ctx.slots.register({
     name: 'settings.general.item',
     id: 'dsh-pet-settings',
     order: 100,
+    inject: () => ({ petSettings }),
   }, PetSettingsRow))
 }

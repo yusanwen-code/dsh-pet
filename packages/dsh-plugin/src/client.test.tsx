@@ -3,8 +3,10 @@ import '@testing-library/jest-dom/vitest'
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import type { SettingsScope } from '@deepseek-ai/dsh-client-ui-settings/client'
 
 import { PetOverlay, PetSettingsRow } from './client.js'
+import type { PetSettings } from './settings-contract.js'
 
 afterEach(() => {
   cleanup()
@@ -13,6 +15,33 @@ afterEach(() => {
 })
 
 describe('native pet overlay', () => {
+  function createSettingsScope(initialEnabled = true): SettingsScope<PetSettings> {
+    let snapshot = {
+      status: 'ready' as const,
+      value: { enabled: initialEnabled },
+      base: {},
+      user: {},
+      revision: 1,
+      writable: true,
+      mode: 'host' as const,
+    }
+    const listeners = new Set<() => void>()
+    return {
+      getSnapshot: () => snapshot,
+      subscribe: (listener) => {
+        listeners.add(listener)
+        return () => listeners.delete(listener)
+      },
+      set: async (field, value) => {
+        if (field !== 'enabled' || typeof value !== 'boolean') throw new Error('invalid pet setting')
+        snapshot = { ...snapshot, value: { enabled: value }, revision: snapshot.revision + 1 }
+        listeners.forEach((listener) => listener())
+      },
+      unset: async () => undefined,
+      mutate: async () => undefined,
+    }
+  }
+
   it('returns a successful session to idle after its presentation window', () => {
     vi.useFakeTimers()
     const props = {
@@ -22,6 +51,7 @@ describe('native pet overlay', () => {
         running: false,
         lastAgentError: null,
       }),
+      petSettings: createSettingsScope(),
     } as unknown as Parameters<typeof PetOverlay>[0]
 
     render(<PetOverlay {...props} />)
@@ -37,9 +67,10 @@ describe('native pet overlay', () => {
       sessionId: 's1',
       useProjection: () => ({ state: 'idle', timestamp: 1 }),
       useSession: (selector: (snapshot: Record<string, unknown>) => unknown) => selector({ running: false, lastAgentError: null }),
+      petSettings: createSettingsScope(),
     } as unknown as Parameters<typeof PetOverlay>[0]
 
-    render(<><PetSettingsRow /><PetOverlay {...props} /></>)
+    render(<><PetSettingsRow petSettings={props.petSettings} /><PetOverlay {...props} /></>)
     expect(screen.getByTestId('pet-art')).toBeVisible()
 
     await user.click(screen.getByRole('switch', { name: '关闭宠物' }))

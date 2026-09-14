@@ -4,7 +4,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import type { PetEvent, PetManifest, PetState } from '@dsh-pet/protocol'
-import { PetCard } from './PetCard.js'
+import { clampPetPosition, PetCard } from './PetCard.js'
 
 afterEach(cleanup)
 
@@ -35,6 +35,15 @@ function event(state: PetState, toolName?: string): PetEvent {
 }
 
 describe('PetCard', () => {
+  it('keeps a restored or dragged pet reachable within the viewport', () => {
+    expect(clampPetPosition(
+      { x: 400, y: -700 },
+      { x: 0, y: 0 },
+      { left: 700, top: 600, width: 92, height: 160 },
+      { innerWidth: 800, innerHeight: 760 },
+    )).toEqual({ x: 0, y: -592 })
+  })
+
   it('shows the current tool without an unnecessary info control', () => {
     render(<PetCard manifest={manifest} event={event('tool', 'bash')} fallbackAsset="/fallback.svg" />)
 

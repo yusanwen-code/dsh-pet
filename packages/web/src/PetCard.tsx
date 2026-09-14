@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
 
 import type { PetEvent, PetManifest, PetState } from '@dsh-pet/protocol'
 
@@ -29,6 +29,27 @@ interface DragStart {
 
 const positionStorageKey = 'dsh-pet.position.v1'
 const initialPosition = { x: 0, y: 0 }
+const viewportMargin = 8
+
+function clamp(value: number, lower: number, upper: number): number {
+  return lower > upper ? (lower + upper) / 2 : Math.min(Math.max(value, lower), upper)
+}
+
+/** Keep a dragged fixed overlay reachable after a resize or restored preference. */
+export function clampPetPosition(
+  next: typeof initialPosition,
+  current: typeof initialPosition,
+  rect: Pick<DOMRect, 'left' | 'top' | 'width' | 'height'>,
+  viewport: Pick<Window, 'innerWidth' | 'innerHeight'>,
+): typeof initialPosition {
+  if (rect.width <= 0 || rect.height <= 0) return next
+  const baseLeft = rect.left - current.x
+  const baseTop = rect.top - current.y
+  return {
+    x: clamp(next.x, viewportMargin - baseLeft, viewport.innerWidth - viewportMargin - rect.width - baseLeft),
+    y: clamp(next.y, viewportMargin - baseTop, viewport.innerHeight - viewportMargin - rect.height - baseTop),
+  }
+}
 
 function readPosition(): typeof initialPosition {
   try {
@@ -56,6 +77,7 @@ export function PetCard({ manifest, event, fallbackAsset, className = '', persis
   const [assetFailed, setAssetFailed] = useState(false)
   const [position, setPosition] = useState(() => persistPreferences ? readPosition() : initialPosition)
   const [dragging, setDragging] = useState(false)
+  const petRef = useRef<HTMLElement | null>(null)
   const drag = useRef<DragStart | null>(null)
   const didDrag = useRef(false)
   const normalizedState: PetState = Object.hasOwn(manifest.assets, event.state) ? event.state : 'idle'
@@ -63,7 +85,20 @@ export function PetCard({ manifest, event, fallbackAsset, className = '', persis
   const asset = manifest.assets[normalizedState]
   const label = statusLabel(normalizedEvent)
 
+  const constrainPosition = useCallback((next: typeof initialPosition, current: typeof initialPosition) => {
+    const rect = petRef.current?.getBoundingClientRect()
+    return rect ? clampPetPosition(next, current, rect, window) : next
+  }, [])
+
   useEffect(() => setAssetFailed(false), [asset.src])
+  useLayoutEffect(() => {
+    setPosition((current) => constrainPosition(current, current))
+  }, [constrainPosition])
+  useEffect(() => {
+    const keepReachable = () => setPosition((current) => constrainPosition(current, current))
+    window.addEventListener('resize', keepReachable)
+    return () => window.removeEventListener('resize', keepReachable)
+  }, [constrainPosition])
   useEffect(() => {
     if (!persistPreferences) return
     try {
@@ -99,7 +134,7 @@ export function PetCard({ manifest, event, fallbackAsset, className = '', persis
     const y = active.originY + pointer.clientY - active.y
     if (Math.abs(x - active.originX) > 3 || Math.abs(y - active.originY) > 3) didDrag.current = true
     setDragging(didDrag.current)
-    setPosition({ x, y })
+    setPosition((current) => constrainPosition({ x, y }, current))
   }
 
   const endDrag = (pointer: ReactPointerEvent<HTMLButtonElement>) => {
@@ -111,6 +146,7 @@ export function PetCard({ manifest, event, fallbackAsset, className = '', persis
 
   return (
     <aside
+      ref={petRef}
       className={classes}
       data-state={normalizedState}
       style={{ transform: `translate3d(${position.x}px, ${position.y}px, 0)` } as CSSProperties}
