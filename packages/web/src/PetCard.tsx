@@ -7,7 +7,7 @@ export interface PetCardProps {
   event: PetEvent
   fallbackAsset: string
   className?: string
-  /** Keep placement and visibility between DSH restarts. */
+  /** Keep the drag placement between DSH restarts. */
   persistPreferences?: boolean
 }
 
@@ -28,7 +28,6 @@ interface DragStart {
 }
 
 const positionStorageKey = 'dsh-pet.position.v1'
-const visibilityStorageKey = 'dsh-pet.collapsed.v1'
 const initialPosition = { x: 0, y: 0 }
 
 function readPosition(): typeof initialPosition {
@@ -47,21 +46,12 @@ function readPosition(): typeof initialPosition {
   return initialPosition
 }
 
-function readCollapsed(): boolean {
-  try {
-    return window.localStorage.getItem(visibilityStorageKey) === 'true'
-  } catch {
-    return false
-  }
-}
-
 function statusLabel(event: PetEvent): string {
   if (event.state === 'tool' && event.toolName) return `正在使用 ${event.toolName}`
   return stateLabels[event.state]
 }
 
 export function PetCard({ manifest, event, fallbackAsset, className = '', persistPreferences = false }: PetCardProps) {
-  const [collapsed, setCollapsed] = useState(() => persistPreferences && readCollapsed())
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [reaction, setReaction] = useState(0)
   const [assetFailed, setAssetFailed] = useState(false)
@@ -83,14 +73,6 @@ export function PetCard({ manifest, event, fallbackAsset, className = '', persis
       // The pet remains movable even when its host does not allow persistence.
     }
   }, [persistPreferences, position])
-  useEffect(() => {
-    if (!persistPreferences) return
-    try {
-      window.localStorage.setItem(visibilityStorageKey, String(collapsed))
-    } catch {
-      // The in-memory preference still works for this DSH session.
-    }
-  }, [collapsed, persistPreferences])
   const imageSrc = assetFailed ? fallbackAsset : asset.src
   const classes = useMemo(
     () => ['dsh-pet', `dsh-pet--${normalizedState}`, dragging ? 'dsh-pet--dragging' : '', reaction % 2 ? 'dsh-pet--hello' : '', className]
@@ -128,14 +110,6 @@ export function PetCard({ manifest, event, fallbackAsset, className = '', persis
     pointer.currentTarget.releasePointerCapture?.(pointer.pointerId)
   }
 
-  if (collapsed) {
-    return (
-      <button className="dsh-pet dsh-pet__dock" type="button" aria-label="开启宠物" onClick={() => setCollapsed(false)}>
-        <img src={imageSrc} alt="" aria-hidden="true" />
-      </button>
-    )
-  }
-
   return (
     <aside
       className={classes}
@@ -155,7 +129,6 @@ export function PetCard({ manifest, event, fallbackAsset, className = '', persis
           >
             {detailsOpen ? '×' : 'i'}
           </button>
-          <button className="dsh-pet__collapse" type="button" aria-label="关闭宠物" onClick={() => setCollapsed(true)}>−</button>
         </div>
       </div>
       <div className="dsh-pet__signal-line" aria-hidden="true" />
